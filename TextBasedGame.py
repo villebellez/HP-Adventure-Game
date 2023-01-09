@@ -1,6 +1,14 @@
 # Version 1.0 of the currently untitled Harry Potter Text Adventure Game.
 # This is the final project for IT-140 at Southern New Hampshire University.
-# Project requirements explicitly state that everything must be coded within one file, otherwise this would be split into multiple files for clarity.
+# Project requirements explicitly state that everything must be coded within one script, otherwise this would be split into seperate files for clarity.
+import random
+
+logo = ''' _   _                             ____          _    _               
+| | | |  __ _  _ __  _ __  _   _  |  _ \   ___  | |_ | |_   ___  _ __ 
+| |_| | / _` || '__|| '__|| | | | | |_) | / _ \ | __|| __| / _ \| '__|
+|  _  || (_| || |   | |   | |_| | |  __/ | (_) || |_ | |_ |  __/| |   
+|_| |_| \__,_||_|   |_|    \__, | |_|     \___/  \__| \__| \___||_|   
+                           |___/    & THE TEXT-BASED ADVENTURE GAME   '''
 
 
 list_of_rooms = {
@@ -93,7 +101,7 @@ list_of_rooms = {
         'voldemort': 'yes',
         'times': 0,
     },
-    'Headmaster\' Office': {
+    'Headmaster\'s Office': {
         'south': 'first flight of stairs',
         'horcrux': 'Salazar Slytherin\'s Locket',
         'voldemort': 'no',
@@ -104,16 +112,12 @@ list_of_rooms = {
 #game_start_room = 'Entrance Hall'
 #destroyed_horcruxes = []
 
-#current_room = list_of_rooms.get(game_start_room)
-#room_horcrux = current_room.get('horcrux')
-
 # TODO: Dictionary of responses.
 
-def player_status(room, horcrux, destroyed, moving):
-    '''Displays the player's current room, the horcrux in their current room, and the list of horcruxes they have already destroyed.'''
+def player_status(room, horcrux, moving):
+    '''Displays the player's current room, the horcrux in their current room if they have yet to destroy it, and the list of horcruxes they have already destroyed.'''
 
-    # TODO: Style player_status.
-    print("PLAYER STATUS:")
+    print("POTTER STATUS:")
 
     if room == 'Snape\'s Office':
         print(f"• You are currently in {room}.")
@@ -125,22 +129,42 @@ def player_status(room, horcrux, destroyed, moving):
     else:
         print(f"• You are currently in the {room}.")
 
+    if len(destroyed_horcruxes) == 0:
+        print(f"• You have yet to destroy any horcruxes.")
+    elif len(destroyed_horcruxes) == 1:
+        print(f"• You have only destroyed {destroyed_horcruxes[0]} so far.")
+    else:
+        print(f"• The horcruxes you have already destroyed are ", end='')
+        print('{} and {}.'.format(', '.join(destroyed_horcruxes[:-1]) + ',', destroyed_horcruxes[-1]))
+
+    x = 6 - len(destroyed_horcruxes)
+
+    if x == 0:
+        print(f"• There are no horcruxes remaining.")
+    elif x == 1:
+        print(f"• There is {x} horcruxes remaining.")
+    else:
+        print(f"• There are {x} horcruxes remaining.")
+
+
+def nav(directions, horcrux):
+    '''Displays all input options to the player.'''
+
+    if len(directions) <= 2:
+        print(f"\n[ From your current room, you can only go ", end="")
+        print(' or '.join(directions), end=". ")
+    else:
+        print(f"\n[ From your current room, you can go ", end="")
+        print('{} or {}.'.format(', '.join(directions[:-1]) + ',', directions[-1]), end=" ")
+
     if horcrux == 'none':
-        print("• There are no horcruxes in this room.")
-    elif horcrux in destroyed:
-        print("• You have already destroyed the horcrux in this room.")
+        print("As there are no horcruxes in this room, it seems going elsewhere is your only option. ]")
+    elif horcrux in destroyed_horcruxes:
+        print("As you have already destroyed the horcrux in this room, it seems going elsewhere is your only option. ]")
     else:
-        print(f"• The horcrux in this room is {horcrux}.")
+        length = ["short", "quick", "lengthy", "difficult", "long"]
+        print(f"After a {random.choice(length)} search, you find that the horcrux in this room is {horcrux}. To destroy it, please type 'destroy'.")
 
-    if len(destroyed) == 0:
-        print(f"• In case you\'ve forgotten, you have yet to destroy any horcruxes.")
-    elif len(destroyed) == 1:
-        print(f"• In case you\'ve forgotten, you have only destroyed {destroyed[0]} so far.")
-    else:
-        print(f"• In case you\'ve forgotten, the horcruxes you have destroyed already are ", end='')
-        print('{} and {}.'.format(', '.join(destroyed[:-1]) + ',', destroyed[-1]))
-
-# TODO: Navigation function ( what commands they can enter )
 
 # TODO: Move between rooms function.
 
@@ -152,11 +176,19 @@ def player_status(room, horcrux, destroyed, moving):
 
 # TODO: Game Loop
 
-# Testing area.
-current_room = 'Headmaster\' Office'
-validation = list_of_rooms.get(current_room)
-room_horcrux = validation.get('horcrux')
+
+print(logo, "\n \n")
+
+# Testing values.
+current_room = 'second floor girl\'s bathroom'
+room_dict = list_of_rooms.get(current_room)
+options = list(room_dict.keys())
+valid_directions = options[:len(options) - 3]
+room_horcrux = room_dict.get('horcrux')
 direction = 'north'
 destroyed_horcruxes = ['Salazar Slytherin\'s Locket', 'Rowena Ravenclaw\'s Diadem', 'Helga Hufflepuff\'s Cup']
 
-player_status(current_room, room_horcrux, destroyed_horcruxes, direction)
+# Testing functions.
+
+player_status(current_room, room_horcrux, direction)
+nav(valid_directions, room_horcrux)
