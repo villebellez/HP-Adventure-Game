@@ -1,6 +1,7 @@
 # Version 1.0 of the currently untitled Harry Potter Text Adventure Game.
 # This is the final project for IT-140 at Southern New Hampshire University.
 # Project requirements explicitly state that everything must be coded within one script, otherwise this would be split into seperate files for clarity.
+
 import random
 
 logo = ''' _   _                             ____          _    _               
@@ -9,7 +10,6 @@ logo = ''' _   _                             ____          _    _
 |  _  || (_| || |   | |   | |_| | |  __/ | (_) || |_ | |_ |  __/| |   
 |_| |_| \__,_||_|   |_|    \__, | |_|     \___/  \__| \__| \___||_|   
                            |___/    & THE TEXT-BASED ADVENTURE GAME   '''
-
 
 list_of_rooms = {
     'Entrance Hall': {
@@ -24,7 +24,7 @@ list_of_rooms = {
     'staircase to the dungeons': {
         'north': 'Entrance Hall',
         'east': 'Slytherin Common Room',
-        'west': 'Snape’s Office',
+        'west': 'Snape\'s Office',
         'horcrux': 'none',
         'voldemort': 'no',
         'times': 0,
@@ -61,7 +61,7 @@ list_of_rooms = {
         'times': 0,
     },
     'first flight of stairs': {
-        'north': 'first flight of stairs',
+        'north': 'second flight of stairs',
         'east': 'second floor girl\'s bathroom',
         'south': 'Entrance Hall',
         'horcrux': 'none',
@@ -81,7 +81,7 @@ list_of_rooms = {
         'voldemort': 'no',
         'times': 0,
     },
-    'first flight of stairs': {
+    'second flight of stairs': {
         'north': 'Headmaster\' Office',
         'east': 'Room of Requirement',
         'west': 'Gryffindor Common Room',
@@ -109,16 +109,14 @@ list_of_rooms = {
     }
 }
 
-#game_start_room = 'Entrance Hall'
-#destroyed_horcruxes = []
-
 # TODO: Dictionary of responses.
 
 def player_status(room, horcrux, moving):
     '''Displays the player's current room, the horcrux in their current room if they have yet to destroy it, and the list of horcruxes they have already destroyed.'''
 
-    print("POTTER STATUS:")
+    print("\nPOTTER STATUS:")
 
+    # TODO: Add moving options
     if room == 'Snape\'s Office':
         print(f"• You are currently in {room}.")
     elif room == 'staircase to the dungeons' or room == 'first flight of stairs' or room == 'second flight of stairs':
@@ -140,21 +138,21 @@ def player_status(room, horcrux, moving):
     x = 6 - len(destroyed_horcruxes)
 
     if x == 0:
-        print(f"• There are no horcruxes remaining.")
+        print(f"• There are no horcruxes remaining.\n")
     elif x == 1:
-        print(f"• There is {x} horcruxes remaining.")
+        print(f"• There is {x} horcruxes remaining.\n")
     else:
-        print(f"• There are {x} horcruxes remaining.")
+        print(f"• There are {x} horcruxes remaining.\n")
 
 
 def nav(directions, horcrux):
     '''Displays all input options to the player.'''
 
     if len(directions) <= 2:
-        print(f"\n[ From your current room, you can only go ", end="")
+        print(f"[ From your current room, you can only go ", end="")
         print(' or '.join(directions), end=". ")
     else:
-        print(f"\n[ From your current room, you can go ", end="")
+        print(f"[ From your current room, you can go ", end="")
         print('{} or {}.'.format(', '.join(directions[:-1]) + ',', directions[-1]), end=" ")
 
     if horcrux == 'none':
@@ -163,32 +161,68 @@ def nav(directions, horcrux):
         print("As you have already destroyed the horcrux in this room, it seems going elsewhere is your only option. ]")
     else:
         length = ["short", "quick", "lengthy", "difficult", "long"]
-        print(f"After a {random.choice(length)} search, you find that the horcrux in this room is {horcrux}. To destroy it, please type 'destroy'.")
+        print(f"After a {random.choice(length)} search, you find that the horcrux in this room is {horcrux}. ]")
 
 
-# TODO: Move between rooms function.
+def move_rooms(valid_directions, direction, room_dict):
+    '''Moves the player to the specified room, or allows them to see their progress.'''
+
+    while True:
+        decision = input(f"[ Which way would you like to go? You may also type 'status' to see more info on your progress. ] \n").lower()
+
+        if decision in valid_directions:
+
+            direction = decision
+            room = room_dict.get(direction)
+
+            if room == 'Snape\'s Office':
+                print(f"[ You move into {room}. ]\n")
+            elif room == 'staircase to the dungeons' or room == 'first flight of stairs' or room == 'second flight of stairs':
+                if direction == 'south':
+                    print(f"[ You move down the {room}. ]\n")
+                else:
+                    print(f"[ You move up the {room}. ]\n")
+            else:
+                print(f"[ You move into the {room}. ]\n")
+            return room
+
+        elif decision == 'status':
+            player_status(current_room, room_horcrux, direction)
+
+        else:
+            print("[ That is an invalid input. Please try again. ]\n")
 
 # TODO: Destroy horcrux function
 
-# TODO: Win/Lose Function
+# TODO: Win/Lose Check
 
 # TODO: Welcome screen.
 
-# TODO: Game Loop
+# Testing values.
+current_room = 'Entrance Hall'
+#destroyed_horcruxes = []
+destroyed_horcruxes = ['Salazar Slytherin\'s Locket', 'Rowena Ravenclaw\'s Diadem']
+direction = 'north'
 
+
+def main(current_room):
+    while True:
+        room_dict = list_of_rooms.get(current_room)
+        options = list(room_dict.keys())
+        valid_directions = options[:len(options) - 3]
+        room_horcrux = room_dict.get('horcrux')
+
+        nav(valid_directions, room_horcrux)
+
+        if room_horcrux != 'none' and room_horcrux not in destroyed_horcruxes:
+            yn = input(f"[ Would you like to destroy it? Yes or no. ]\n").lower()
+            if yn == 'yes':
+                # TODO: Add in function.
+                print("Well there's no get item function yet so you're SOL.")
+            else:
+                current_room = move_rooms(valid_directions, direction, room_dict)
+        else:
+            current_room = move_rooms(valid_directions, direction, room_dict)
 
 print(logo, "\n \n")
-
-# Testing values.
-current_room = 'second floor girl\'s bathroom'
-room_dict = list_of_rooms.get(current_room)
-options = list(room_dict.keys())
-valid_directions = options[:len(options) - 3]
-room_horcrux = room_dict.get('horcrux')
-direction = 'north'
-destroyed_horcruxes = ['Salazar Slytherin\'s Locket', 'Rowena Ravenclaw\'s Diadem', 'Helga Hufflepuff\'s Cup']
-
-# Testing functions.
-
-player_status(current_room, room_horcrux, direction)
-nav(valid_directions, room_horcrux)
+main(current_room)
