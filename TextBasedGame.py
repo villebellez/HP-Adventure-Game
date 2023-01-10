@@ -170,7 +170,7 @@ def nav(directions, horcrux):
         print(f"After a {random.choice(length)} search, you find that the horcrux in this room is {horcrux}. ]")
 
 
-def move_rooms(valid_directions, direction, room_dict, horcrux, times, current_room):
+def move_rooms(valid_directions, room_dict, horcrux, times, current_room):
     '''Moves the player to the specified room, or allows them to see their progress.'''
 
     while True:
@@ -209,6 +209,9 @@ def move_rooms(valid_directions, direction, room_dict, horcrux, times, current_r
                         print(f"\n[ You move back to the {new_room} once more. ]")
             elif new_room == 'Entrance Hall':
                 print(f"\n[ You move back to the {new_room}. ]")
+            elif new_room == 'Gryffindor Common Room':
+                print(f"\n[ You move into to the {new_room}. ]")
+                win_lose(destroyed_horcruxes)
             else:
                 if times == 0:
                     print(f"\n[ You move into the {new_room}. ]")
@@ -222,15 +225,23 @@ def move_rooms(valid_directions, direction, room_dict, horcrux, times, current_r
         else:
             print("\n[ That is an invalid input. Please try again. ]")
 
-# TODO: Win/Lose Check
+
+def win_lose(destroyed_horcruxes):
+    '''Checks if player has destroyed all the necessary items in order to win the game.'''
+
+    if len(destroyed_horcruxes) == 6:
+        print("[ You win! ]")
+        exit()
+    else:
+        print("[ You lose! ]")
+        exit()
+
 
 # TODO: Welcome screen.
 
 # Testing values.
 current_room = 'Entrance Hall'
 destroyed_horcruxes = []
-direction = 'north'
-
 
 def main(current_room):
     '''Main loop function of the game.'''
@@ -252,13 +263,13 @@ def main(current_room):
                 print(f"You have destroyed {room_horcrux}.")
                 destroyed_horcruxes.append(room_horcrux)
             elif yn == 'no':
-                current_room, times = move_rooms(valid_directions, direction, room_dict, room_horcrux, times, current_room)
+                current_room, times = move_rooms(valid_directions, room_dict, room_horcrux, times, current_room)
                 times += 1
                 room_dict.update({'times': times})
             else:
                 print("[ That is an invalid input. Please try again. ]\n")
         else:
-            current_room, times = move_rooms(valid_directions, direction, room_dict, room_horcrux, times, current_room)
+            current_room, times = move_rooms(valid_directions, room_dict, room_horcrux, times, current_room)
             times += 1
             room_dict.update({'times': times})
 
