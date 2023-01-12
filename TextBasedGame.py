@@ -19,7 +19,7 @@ list_of_rooms = {
         'west': 'Ravenclaw Common Room',
         'horcrux': 'none',
         'voldemort': 'no',
-        'times': 1,
+        'times': 0,
     },
     'staircase to the dungeons': {
         'north': 'Entrance Hall',
@@ -109,7 +109,107 @@ list_of_rooms = {
     }
 }
 
-# TODO: Dictionary of responses.
+# TODO: Finish up or down stairs, test to make sure all directions work as intended.
+def dialogue(current_room, direction, times, room_horcrux):
+    '''Unique NPC dialogue dependent on current room, number of times visited, and if horcrux has been destroyed or not.'''
+
+    if current_room == 'Entrance Hall':
+        if times == 0:
+            print("\n// Dialogue for Entrance Hall, first time, to be added later. //\n")
+        else:
+            print("\n// Dialogue for Entrance Hall, revisited, to be added later. //\n")
+    elif current_room == 'staircase to the dungeons':
+        if times == 0:
+            print("\n// Dialogue for dungeon staircase, first time, to be added later. //\n")
+        elif times == 1:
+            print("\n// Dialogue for dungeon staircase, revisited, going UP, still another room to be explored, to be added later. //\n")
+        else:
+            if direction == 'west' or direction == 'east':
+                print("\n// Dialogue for dungeon staircase, revisited, going UP, to be added later. //\n")
+            else:
+                print("\n// Dialogue for dungeon staircase, revisited, going DOWN, to be added later. //\n")
+    elif current_room == 'Slytherin Common Room':
+        if times == 0:
+            print("\n// Dialogue for Slytherin Common Room, first time, to be added later. //\n")
+        else:
+            if room_horcrux in destroyed:
+                print("\n// Dialogue for Slytherin Common Room, revisited, horcrux destroyed, to be added later. //\n")
+            else:
+                print("\n// Dialogue for Slytherin Common Room, revisited, horcrux NOT destroyed, to be added later. //\n")
+    elif current_room == 'Snape\'s Office':
+        if times == 0:
+            print("\n// Dialogue for Snape\'s Office, first time, to be added later. //\n")
+        else:
+            if room_horcrux in destroyed:
+                print("\n// Dialogue for Snape\'s Office, revisited, horcrux destroyed, to be added later. //\n")
+            else:
+                print("\n// Dialogue for Snape\'s Office, revisited, horcrux NOT destroyed, to be added later. //\n")
+    elif current_room == 'Ravenclaw Common Room':
+        if times == 0:
+            print("\n// Dialogue for Ravenclaw Common Room, first time, to be added later. //\n")
+        else:
+            print("\n// Dialogue for Ravenclaw Common Room, revisited, to be added later. //\n")
+    elif current_room == 'kitchen':
+        print(times)
+        if times == 0:
+            print("\n// Dialogue for kitchen, first time, to be added later. //\n")
+        else:
+            print("\n// Dialogue for kitchen, revisited, to be added later. //\n")
+    elif current_room == 'Hufflepuff Common Room':
+        if times == 0:
+            print("\n// Dialogue for Hufflepuff Common Room, first time, to be added later. //\n")
+        else:
+            if room_horcrux in destroyed:
+                print("\n// Dialogue for Hufflepuff Common Room, revisited, horcrux destroyed, to be added later. //\n")
+            else:
+                print(
+                    "\n// Dialogue for Hufflepuff Common Room, revisited, horcrux NOT destroyed, to be added later. //\n")
+    elif current_room == 'first flight of stairs':
+        if times == 0:
+            print("\n// Dialogue for first flight of stairs, first time, to be added later. //\n")
+        else:
+            print("\n// Dialogue for first flight of stairs, revisited, to be added later. //\n")
+    elif current_room == 'second floor girl\'s bathroom':
+        if times == 0:
+            print("\n// Dialogue for second floor girl\'s bathroom, first time, to be added later. //\n")
+        else:
+            print("\n// Dialogue for second floor girl\'s bathroom, revisited, to be added later. //\n")
+    elif current_room == 'Chamber of Secrets':
+        if times == 0:
+            print("\n// Dialogue for Chamber of Secrets, first time, to be added later. //\n")
+        else:
+            if room_horcrux in destroyed:
+                print("\n// Dialogue for Chamber of Secrets, revisited, horcrux destroyed, to be added later. //\n")
+            else:
+                print("\n// Dialogue for Chamber of Secrets, revisited, horcrux NOT destroyed, to be added later. //\n")
+    elif current_room == 'second flight of stairs':
+        if times == 0:
+            print("\n// Dialogue for second flight of stairs, first time, to be added later. //\n")
+        else:
+            print("\n// Dialogue for second flight of stairs, revisited, to be added later. //\n")
+    elif current_room == 'Room of Requirement':
+        if times == 0:
+            print("\n// Dialogue for Room of Requirement, first time, to be added later. //\n")
+        else:
+            if room_horcrux in destroyed:
+                print("\n// Dialogue for Room of Requirement, revisited, horcrux destroyed, to be added later. //\n")
+            else:
+                print("\n// Dialogue for Room of Requirement, revisited, horcrux NOT destroyed, to be added later. //\n")
+    elif current_room == 'Gryffindor Common Room':
+        if len(destroyed) == 6:
+            print("\n// Battle dialogue - win, to be added later. //\n")
+        else:
+            print("\n// Battle dialogue - lose, to be added later. //\n")
+        win_lose(destroyed)
+    elif current_room == 'Headmaster\'s Office':
+        if times == 0:
+            print("\n// Dialogue for Headmaster\'s Office, first time, to be added later. //\n")
+        else:
+            if room_horcrux in destroyed:
+                print("\n// Dialogue for Headmaster\'s Office, revisited, horcrux destroyed, to be added later. //\n")
+            else:
+                print("\n// Dialogue for Headmaster\'s Office, revisited, horcrux NOT destroyed, to be added later. //\n")
+
 
 def player_status(current_room, room_horcrux, direction, valid_directions):
     '''Displays the player's current room, the horcrux in their current room if they have yet to destroy it, and the list of horcruxes they have already destroyed.'''
@@ -207,9 +307,6 @@ def move_rooms(direction, valid_directions, room_dict, room_horcrux, times, curr
                         print(f"\n[ You move to the {new_room}. ]")
                     else:
                         print(f"\n[ You move back to the {new_room} once more. ]")
-            elif new_room == 'Gryffindor Common Room':
-                print(f"\n[ You move into to the {new_room}. ]")
-                win_lose(destroyed)
             else:
                 if times == 0:
                     print(f"\n[ You move into the {new_room}. ]")
@@ -234,18 +331,16 @@ def destroy_horcrux(direction, valid_directions, room_dict, room_horcrux, times,
         return current_room, times
     elif yn == 'no':
         current_room, times = move_rooms(direction, valid_directions, room_dict, room_horcrux, times, current_room)
-        times += 1
-        room_dict.update({'times': times})
         return current_room, times
     else:
         print("[ That is an invalid input. Please try again. ]\n")
         return current_room, times
 
 
-def win_lose(destroyed_horcruxes):
+def win_lose(destroyed):
     '''Checks if player has destroyed all the necessary items in order to win the game.'''
 
-    if len(destroyed_horcruxes) == 6:
+    if len(destroyed) == 6:
         print("[ You win! ]")
         exit()
     else:
@@ -263,13 +358,17 @@ def main(current_room, direction):
         room_horcrux = room_dict.get('horcrux')
         times = room_dict.get('times')
 
+        print(current_room)
+        print(times)
+
         nav(valid_directions, room_horcrux)
         if room_horcrux != 'none' and room_horcrux not in destroyed:
             current_room, times = destroy_horcrux(direction, valid_directions, room_dict, room_horcrux, times, current_room)
         else:
             current_room, times = move_rooms(direction, valid_directions, room_dict, room_horcrux, times, current_room)
-            times += 1
-            room_dict.update({'times': times})
+        dialogue(current_room, direction, times, room_horcrux)
+        times += 1
+        room_dict.update({'times': times})
 
 # Default starting values.
 current_room = 'Entrance Hall'
