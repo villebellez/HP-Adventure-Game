@@ -109,7 +109,7 @@ list_of_rooms = {
     }
 }
 
-# TODO: Finish up or down stairs (copy/paste, first one works), test to make sure all directions work as intended.
+# TODO: Insert dialogue.
 def dialogue(current_room, direction, times, room_horcrux, previous_room):
     '''Unique NPC dialogue dependent on current room, number of times visited, and if horcrux has been destroyed or not.'''
 
@@ -130,12 +130,12 @@ def dialogue(current_room, direction, times, room_horcrux, previous_room):
         if times == 1:
             print("\n// Dialogue for dungeon staircase, first time, to be added later. //\n")
         elif previous_room == "Slytherin Common Room" or previous_room == "Snape\'s Office":
-            if (snape_times == 0 and slytherin_times > 0) or (snape_times > 0 and slytherin_times == 0):
+            if snape_times == 0 or slytherin_times == 0:
                 print("\n// Dialogue for dungeon staircase, revisited, going UP, still another room to be explored, to be added later. //\n")
             else:
                 print("\n// Dialogue for dungeon staircase, revisited, going UP, to be added later. //\n")
         elif previous_room == "Entrance Hall":
-            if (snape_times == 0 and slytherin_times > 0) or (snape_times > 0 and slytherin_times == 0):
+            if snape_times == 0 or slytherin_times == 0:
                 print("\n// Dialogue for dungeon staircase, revisited, going DOWN, still another room to be explored, to be added later. //\n")
             else:
                 print("\n// Dialogue for dungeon staircase, revisited, going DOWN, to be added later. //\n")
@@ -182,10 +182,21 @@ def dialogue(current_room, direction, times, room_horcrux, previous_room):
                     "\n// Dialogue for Hufflepuff Common Room, revisited, horcrux NOT destroyed, to be added later. //\n")
 
     elif current_room == 'first flight of stairs':
+
+        bathroom = list_of_rooms.get('second floor girl\'s bathroom')
+        bathroom_times = bathroom.get('times')
+
+        chamber = list_of_rooms.get('Chamber of Secrets')
+        chamber_times = chamber.get('times')
+
         if times == 1:
             print("\n// Dialogue for first flight of stairs, first time, to be added later. //\n")
-        else:
-            print("\n// Dialogue for first flight of stairs, revisited, to be added later. //\n")
+        elif previous_room == "second floor girl\'s bathroom" or previous_room == "Entrance Hall" or previous_room == "second flight of stairs":
+            if bathroom_times == 0 or chamber_times == 0:
+                print("\n// Dialogue for first flight of stairs, revisited, still another room to be explored, to be added later. //\n")
+            else:
+                print("\n// Dialogue for first flight of stairs, revisited, to be added later. //\n")
+
 
     elif current_room == 'second floor girl\'s bathroom':
         if times == 1:
@@ -203,10 +214,30 @@ def dialogue(current_room, direction, times, room_horcrux, previous_room):
                 print("\n// Dialogue for Chamber of Secrets, revisited, horcrux NOT destroyed, to be added later. //\n")
 
     elif current_room == 'second flight of stairs':
+
+        gryffindor = list_of_rooms.get('Gryffindor Common Room')
+        gryffindor_times = gryffindor.get('times')
+
+        headmaster = list_of_rooms.get('Headmaster\'s Office')
+        headmaster_times = headmaster.get('times')
+
+        requirement = list_of_rooms.get('Room of Requirement')
+        requirement_times = requirement.get('times')
+
         if times == 1:
-            print("\n// Dialogue for second flight of stairs, first time, to be added later. //\n")
-        else:
-            print("\n// Dialogue for second flight of stairs, revisited, to be added later. //\n")
+            print("\n// Dialogue for second flight of stairs, first time, to be added later //\n")
+        elif previous_room == "Room of Requirement" or previous_room == "Headmaster\'s Office":
+            if gryffindor_times == 0 or headmaster_times == 0 or requirement_times == 0:
+                print("\n// Dialogue for second flight of stairs, revisited, going DOWN, still another room to be explored, to be added later. //\n")
+            else:
+                print("\n// Dialogue for second flight of stairs, revisited, going DOWN, to be added later. //\n")
+        elif previous_room == "first flight of stairs":
+            if gryffindor_times == 0 or headmaster_times == 0 or requirement_times == 0:
+                print(
+                    "\n// Dialogue for second flight of stairs, revisited, going UP, other room to be explored, to be added later. //\n")
+            else:
+                print("\n// Dialogue for second flight of stairs, revisited, going UP, to be added later. //\n")
+
 
     elif current_room == 'Room of Requirement':
         if times == 1:
@@ -301,7 +332,7 @@ def move_rooms(direction, valid_directions, room_dict, room_horcrux, times, curr
 
         if decision in valid_directions:
 
-        # TODO: see if I can get rid of new_room since the rebranding of current room is only in this loop.
+        # TODO: test getting rid of new_room
             direction = decision
             new_room = room_dict.get(direction)
             previous_room = current_room
@@ -310,33 +341,33 @@ def move_rooms(direction, valid_directions, room_dict, room_horcrux, times, curr
             times = room_dict.get('times')
 
 
-            if new_room == 'Snape\'s Office':
+            if current_room == 'Snape\'s Office':
                 if times == 0:
-                    print(f"\n[ You move into {new_room}. ]")
+                    print(f"\n[ You move into {current_room}. ]")
                 else:
-                    (f"\n[ You return to {new_room}. ]")
-            elif new_room == 'staircase to the dungeons' or new_room == 'first flight of stairs' or new_room == 'second flight of stairs':
+                    (f"\n[ You return to {current_room}. ]")
+            elif current_room == 'staircase to the dungeons' or current_room == 'first flight of stairs' or current_room == 'second flight of stairs':
                 if direction == 'south':
                     if times == 0:
-                        print(f"\n[ You move down the {new_room}. ]")
+                        print(f"\n[ You move down the {current_room}. ]")
                     else:
-                        print(f"\n[ You move down the {new_room} once again. ]")
+                        print(f"\n[ You move down the {current_room} once again. ]")
                 elif direction == 'north':
                     if times == 0:
-                        print(f"\n[ You move up the {new_room}. ]")
+                        print(f"\n[ You move up the {current_room}. ]")
                     else:
-                        print(f"\n[ You move up the {new_room} once more. ]")
+                        print(f"\n[ You move up the {current_room} once more. ]")
                 else:
                     if times == 0:
-                        print(f"\n[ You move to the {new_room}. ]")
+                        print(f"\n[ You move to the {current_room}. ]")
                     else:
-                        print(f"\n[ You move back to the {new_room} once more. ]")
+                        print(f"\n[ You move back to the {current_room} once more. ]")
             else:
                 if times == 0:
-                    print(f"\n[ You move into the {new_room}. ]")
+                    print(f"\n[ You move into the {current_room}. ]")
                 else:
-                    print(f"\n[ You move back into the {new_room}. ]")
-            return new_room, times, previous_room
+                    print(f"\n[ You move back into the {current_room}. ]")
+            return current_room, times, previous_room
 
         elif decision == 'status':
             player_status(current_room, room_horcrux, direction, valid_directions)
@@ -401,9 +432,9 @@ direction = 'none'
 
 print(logo, "\n")
 
-print("Harry Potter has just returned to Hogwarts to face Lord Voldemort in the final battle.\n"
-      "Luckily, although Voldemort may be evil, it seems as though he is not very bright, as he hid the six other peices of his soul in horcruxes around the castle.\n"
-      "With a little help from his friends Ron and Hermione, Harry must search the castle and destroy all six horcruxes before finding and facing his enemy in battle.\n"
-      "But watch out! If Harry comes face-to-face with Voldemort unprepared, the final battle will not have a happy ending. Are you prepared to step into Harry's shoes and save the wizarding world?\n")
+print("> Harry Potter has just returned to Hogwarts to face Lord Voldemort in the final battle.\n"
+      "> Luckily, although Voldemort may be evil, it seems as though he is not very bright, as he hid the six other peices of his soul in horcruxes around the castle.\n"
+      "> With a little help from his friends Ron and Hermione, Harry must search the castle and destroy all six horcruxes before finding and facing his enemy in battle.\n"
+      "> But watch out! If Harry comes face-to-face with Voldemort unprepared, the final battle will not have a happy ending. Are you prepared to step into Harry's shoes and save the wizarding world?\n")
 
 main(current_room, direction, previous_room)
