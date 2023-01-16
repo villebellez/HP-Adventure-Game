@@ -109,8 +109,8 @@ list_of_rooms = {
     }
 }
 
-# TODO: Finish up or down stairs, test to make sure all directions work as intended.
-def dialogue(current_room, direction, times, room_horcrux):
+# TODO: Finish up or down stairs (copy/paste, first one works), test to make sure all directions work as intended.
+def dialogue(current_room, direction, times, room_horcrux, previous_room):
     '''Unique NPC dialogue dependent on current room, number of times visited, and if horcrux has been destroyed or not.'''
 
     if current_room == 'Entrance Hall':
@@ -118,45 +118,61 @@ def dialogue(current_room, direction, times, room_horcrux):
             print("\n// Dialogue for Entrance Hall, first time, to be added later. //\n")
         else:
             print("\n// Dialogue for Entrance Hall, revisited, to be added later. //\n")
+
     elif current_room == 'staircase to the dungeons':
-        if times == 0:
+
+        slytherin = list_of_rooms.get('Slytherin Common Room')
+        slytherin_times = slytherin.get('times')
+
+        snape = list_of_rooms.get('Snape\'s Office')
+        snape_times = snape.get('times')
+
+        if times == 1:
             print("\n// Dialogue for dungeon staircase, first time, to be added later. //\n")
-        elif times == 1:
-            print("\n// Dialogue for dungeon staircase, revisited, going UP, still another room to be explored, to be added later. //\n")
-        else:
-            if direction == 'west' or direction == 'east':
+        elif previous_room == "Slytherin Common Room" or previous_room == "Snape\'s Office":
+            if (snape_times == 0 and slytherin_times > 0) or (snape_times > 0 and slytherin_times == 0):
+                print("\n// Dialogue for dungeon staircase, revisited, going UP, still another room to be explored, to be added later. //\n")
+            else:
                 print("\n// Dialogue for dungeon staircase, revisited, going UP, to be added later. //\n")
+        elif previous_room == "Entrance Hall":
+            if (snape_times == 0 and slytherin_times > 0) or (snape_times > 0 and slytherin_times == 0):
+                print("\n// Dialogue for dungeon staircase, revisited, going DOWN, still another room to be explored, to be added later. //\n")
             else:
                 print("\n// Dialogue for dungeon staircase, revisited, going DOWN, to be added later. //\n")
+
     elif current_room == 'Slytherin Common Room':
-        if times == 0:
+        if times == 1:
             print("\n// Dialogue for Slytherin Common Room, first time, to be added later. //\n")
         else:
             if room_horcrux in destroyed:
                 print("\n// Dialogue for Slytherin Common Room, revisited, horcrux destroyed, to be added later. //\n")
             else:
                 print("\n// Dialogue for Slytherin Common Room, revisited, horcrux NOT destroyed, to be added later. //\n")
+
     elif current_room == 'Snape\'s Office':
-        if times == 0:
+        if times == 1:
             print("\n// Dialogue for Snape\'s Office, first time, to be added later. //\n")
         else:
             if room_horcrux in destroyed:
                 print("\n// Dialogue for Snape\'s Office, revisited, horcrux destroyed, to be added later. //\n")
             else:
                 print("\n// Dialogue for Snape\'s Office, revisited, horcrux NOT destroyed, to be added later. //\n")
+
     elif current_room == 'Ravenclaw Common Room':
-        if times == 0:
+        if times == 1:
             print("\n// Dialogue for Ravenclaw Common Room, first time, to be added later. //\n")
         else:
             print("\n// Dialogue for Ravenclaw Common Room, revisited, to be added later. //\n")
+
     elif current_room == 'kitchen':
         print(times)
-        if times == 0:
+        if times == 1:
             print("\n// Dialogue for kitchen, first time, to be added later. //\n")
         else:
             print("\n// Dialogue for kitchen, revisited, to be added later. //\n")
+
     elif current_room == 'Hufflepuff Common Room':
-        if times == 0:
+        if times == 1:
             print("\n// Dialogue for Hufflepuff Common Room, first time, to be added later. //\n")
         else:
             if room_horcrux in destroyed:
@@ -164,45 +180,52 @@ def dialogue(current_room, direction, times, room_horcrux):
             else:
                 print(
                     "\n// Dialogue for Hufflepuff Common Room, revisited, horcrux NOT destroyed, to be added later. //\n")
+
     elif current_room == 'first flight of stairs':
-        if times == 0:
+        if times == 1:
             print("\n// Dialogue for first flight of stairs, first time, to be added later. //\n")
         else:
             print("\n// Dialogue for first flight of stairs, revisited, to be added later. //\n")
+
     elif current_room == 'second floor girl\'s bathroom':
-        if times == 0:
+        if times == 1:
             print("\n// Dialogue for second floor girl\'s bathroom, first time, to be added later. //\n")
         else:
             print("\n// Dialogue for second floor girl\'s bathroom, revisited, to be added later. //\n")
+
     elif current_room == 'Chamber of Secrets':
-        if times == 0:
+        if times == 1:
             print("\n// Dialogue for Chamber of Secrets, first time, to be added later. //\n")
         else:
             if room_horcrux in destroyed:
                 print("\n// Dialogue for Chamber of Secrets, revisited, horcrux destroyed, to be added later. //\n")
             else:
                 print("\n// Dialogue for Chamber of Secrets, revisited, horcrux NOT destroyed, to be added later. //\n")
+
     elif current_room == 'second flight of stairs':
-        if times == 0:
+        if times == 1:
             print("\n// Dialogue for second flight of stairs, first time, to be added later. //\n")
         else:
             print("\n// Dialogue for second flight of stairs, revisited, to be added later. //\n")
+
     elif current_room == 'Room of Requirement':
-        if times == 0:
+        if times == 1:
             print("\n// Dialogue for Room of Requirement, first time, to be added later. //\n")
         else:
             if room_horcrux in destroyed:
                 print("\n// Dialogue for Room of Requirement, revisited, horcrux destroyed, to be added later. //\n")
             else:
                 print("\n// Dialogue for Room of Requirement, revisited, horcrux NOT destroyed, to be added later. //\n")
+
     elif current_room == 'Gryffindor Common Room':
         if len(destroyed) == 6:
             print("\n// Battle dialogue - win, to be added later. //\n")
         else:
             print("\n// Battle dialogue - lose, to be added later. //\n")
         win_lose(destroyed)
+
     elif current_room == 'Headmaster\'s Office':
-        if times == 0:
+        if times == 1:
             print("\n// Dialogue for Headmaster\'s Office, first time, to be added later. //\n")
         else:
             if room_horcrux in destroyed:
@@ -270,7 +293,7 @@ def nav(valid_directions, room_horcrux):
         print(f"After a {random.choice(length)} search, you find that the horcrux in this room is {room_horcrux}. ]")
 
 
-def move_rooms(direction, valid_directions, room_dict, room_horcrux, times, current_room):
+def move_rooms(direction, valid_directions, room_dict, room_horcrux, times, current_room, previous_room):
     '''Moves the player to the specified room, or allows them to see their progress.'''
 
     while True:
@@ -278,9 +301,10 @@ def move_rooms(direction, valid_directions, room_dict, room_horcrux, times, curr
 
         if decision in valid_directions:
 
+        # TODO: see if I can get rid of new_room since the rebranding of current room is only in this loop.
             direction = decision
             new_room = room_dict.get(direction)
-
+            previous_room = current_room
             current_room = new_room
             room_dict = list_of_rooms.get(current_room)
             times = room_dict.get('times')
@@ -312,7 +336,7 @@ def move_rooms(direction, valid_directions, room_dict, room_horcrux, times, curr
                     print(f"\n[ You move into the {new_room}. ]")
                 else:
                     print(f"\n[ You move back into the {new_room}. ]")
-            return new_room, times
+            return new_room, times, previous_room
 
         elif decision == 'status':
             player_status(current_room, room_horcrux, direction, valid_directions)
@@ -320,21 +344,21 @@ def move_rooms(direction, valid_directions, room_dict, room_horcrux, times, curr
         else:
             print("\n[ That is an invalid input. Please try again. ]")
 
-def destroy_horcrux(direction, valid_directions, room_dict, room_horcrux, times, current_room):
+def destroy_horcrux(direction, valid_directions, room_dict, room_horcrux, times, current_room, previous_room):
     '''Asks player if they want to destroy a horcrux or continue on with it undestroyed.'''
 
     yn = input(f"[ Would you like to destroy it? Yes or no. ]\n").lower()
 
     if yn == 'yes':
-        print(f"You have destroyed {room_horcrux}.\n")
+        print(f"[ You have destroyed {room_horcrux}. ]\n")
         destroyed.append(room_horcrux)
-        return current_room, times
+        return current_room, times, previous_room
     elif yn == 'no':
-        current_room, times = move_rooms(direction, valid_directions, room_dict, room_horcrux, times, current_room)
-        return current_room, times
+        current_room, times, previous_room = move_rooms(direction, valid_directions, room_dict, room_horcrux, times, current_room, previous_room)
+        return current_room, times, previous_room
     else:
         print("[ That is an invalid input. Please try again. ]\n")
-        return current_room, times
+        return current_room, times, previous_room
 
 
 def win_lose(destroyed):
@@ -348,7 +372,7 @@ def win_lose(destroyed):
         exit()
 
 
-def main(current_room, direction):
+def main(current_room, direction, previous_room):
     '''Main loop function of the game.'''
 
     while True:
@@ -358,25 +382,28 @@ def main(current_room, direction):
         room_horcrux = room_dict.get('horcrux')
         times = room_dict.get('times')
 
-        print(current_room)
-        print(times)
-
         nav(valid_directions, room_horcrux)
         if room_horcrux != 'none' and room_horcrux not in destroyed:
-            current_room, times = destroy_horcrux(direction, valid_directions, room_dict, room_horcrux, times, current_room)
+            current_room, times, previous_room = destroy_horcrux(direction, valid_directions, room_dict, room_horcrux, times, current_room, previous_room)
         else:
-            current_room, times = move_rooms(direction, valid_directions, room_dict, room_horcrux, times, current_room)
-        dialogue(current_room, direction, times, room_horcrux)
+            current_room, times, previous_room = move_rooms(direction, valid_directions, room_dict, room_horcrux, times, current_room, previous_room)
         times += 1
         room_dict.update({'times': times})
+        dialogue(current_room, direction, times, room_horcrux, previous_room)
+
+# TODO: Email professor about how bloated having to pass everything into a 'main' function is since nothing updates on a global level bc I wanna fkn scream rn tbh
 
 # Default starting values.
 current_room = 'Entrance Hall'
+previous_room = 'none'
 destroyed = []
 direction = 'none'
 
-print(logo, "\n \n")
+print(logo, "\n")
 
-# TODO: Welcome screen.
+print("Harry Potter has just returned to Hogwarts to face Lord Voldemort in the final battle.\n"
+      "Luckily, although Voldemort may be evil, it seems as though he is not very bright, as he hid the six other peices of his soul in horcruxes around the castle.\n"
+      "With a little help from his friends Ron and Hermione, Harry must search the castle and destroy all six horcruxes before finding and facing his enemy in battle.\n"
+      "But watch out! If Harry comes face-to-face with Voldemort unprepared, the final battle will not have a happy ending. Are you prepared to step into Harry's shoes and save the wizarding world?\n")
 
-main(current_room, direction)
+main(current_room, direction, previous_room)
