@@ -11,6 +11,8 @@ logo = ''' _   _                             ____          _    _
 |_| |_| \__,_||_|   |_|    \__, | |_|     \___/  \__| \__| \___||_|   
                            |___/    & THE TEXT-BASED ADVENTURE GAME   '''
 
+# TODO: Get rid of voldemort entry, it's useless. Maybe switch locket and ring, idk.
+
 list_of_rooms = {
     'Entrance Hall': {
         'north': 'first flight of stairs',
@@ -82,7 +84,7 @@ list_of_rooms = {
         'times': 0,
     },
     'second flight of stairs': {
-        'north': 'Headmaster\' Office',
+        'north': 'Headmaster\'s Office',
         'east': 'Room of Requirement',
         'west': 'Gryffindor Common Room',
         'horcrux': 'none',
@@ -90,19 +92,19 @@ list_of_rooms = {
         'times': 0,
     },
     'Room of Requirement': {
-        'west': 'first flight of stairs',
+        'west': 'second flight of stairs',
         'horcrux': 'Rowena Ravenclaw\'s Diadem',
         'voldemort': 'no',
         'times': 0,
     },
     'Gryffindor Common Room': {
-        'east': 'first flight of stairs',
+        'east': 'second flight of stairs',
         'horcrux': 'none',
         'voldemort': 'yes',
         'times': 0,
     },
     'Headmaster\'s Office': {
-        'south': 'first flight of stairs',
+        'south': 'second flight of stairs',
         'horcrux': 'Salazar Slytherin\'s Locket',
         'voldemort': 'no',
         'times': 0,
@@ -256,44 +258,63 @@ def dialogue(current_room, direction, times, room_horcrux, previous_room):
         requirement_times = requirement.get('times')
 
         if times == 0:
-            print('\n// Dialogue for second flight of stairs, first time, to be added later //\n')
+            print('\n"Was kind of expecting the staircases to change on us," Ron says, surprised by the straightforward path.\n'
+                  '"Maybe the castle is trying to help us out," Hermione responds, and Harry is apt to agree.\n')
         elif previous_room == "Room of Requirement" or previous_room == "Headmaster\'s Office":
             if gryffindor_times == 0 or headmaster_times == 0 or requirement_times == 0:
-                print('\n// Dialogue for second flight of stairs, revisited, going DOWN, still another room to be explored, to be added later. //\n')
+                print('\n"I don\'t think we should head back downstairs until we\'ve checked out every room," Hermione reminds Harry, '
+                      'but Ron shakes his head.\n'
+                      '"You don\'t know what room You-Know-Who is lurking in! Harry\'s just being smart."\n')
             else:
-                print('\n// Dialogue for second flight of stairs, revisited, going DOWN, to be added later. //\n')
+                print('\n"Should we head back downstairs then?" asks Ron."\n')
         elif previous_room == "first flight of stairs":
             if gryffindor_times == 0 or headmaster_times == 0 or requirement_times == 0:
                 print(
-                    '\n// Dialogue for second flight of stairs, revisited, going UP, other room to be explored, to be added later. //\n')
+                    '\n"I think it\'s a good idea we\'re coming back up here," Hermione tells the group. "We really should check out '
+                    'every room before moving on. The horcruxes could be anywhere."\n'
+                    '"Yeah, but so could You-Know-Who," Ron interjects, and Harry silently agrees.\n')
             else:
-                print('\n// Dialogue for second flight of stairs, revisited, going UP, to be added later. //\n')
+                print('\n"You feeling okay, Harry?" Ron asks, no doubt wondering if his friend is just as nervous as he is. '
+                      'Harry nods, but his expression is a little more strained than usual."\n')
 
 
     elif current_room == 'Room of Requirement':
         if times == 0:
-            print('\n// Dialogue for Room of Requirement, first time, to be added later. //\n')
+            print('\n"Finding a horcrux in this mess is going to be impossible," Ron notes, looking at the piles upon piles of '
+                  'lost or stashed items that have accumulated over the years.\n'
+                  '"Oh, don\'t be so negative, Ronald," Hermione responds. "I\'m sure it won\'t take that long."\n')
         else:
             if room_horcrux in destroyed:
-                print('\n// Dialogue for Room of Requirement, revisited, horcrux destroyed, to be added later. //\n')
+                print('\n"Nothing left to do in here with the diadem destroyed," Hermione says. "Let\'s head out."\n')
             else:
-                print('\n// Dialogue for Room of Requirement, revisited, horcrux NOT destroyed, to be added later. //\n')
+                print('\n"We have to destroy the diadem this time, Harry," Hermione reminds her friend. "We can\'t defeat Voldemort '
+                      'without all of his horcruxes being destroyed first."\n')
 
     elif current_room == 'Gryffindor Common Room':
         if len(destroyed) == 6:
-            print('\n// Battle dialogue - win, to be added later. //\n')
+            print('\nThe trio enters their old Common Room, only to be greeted by the smiling face of their enemy.\n'
+                  '"Ah, Harry... I knew you would come," Voldemort drawls as he pulls out his wand. Although they are scared, '
+                  'Ron and Hermione stand tall next to their friend.\n'
+                  '"Too bad for you, we came prepared!" shouts Ron, but Voldemort just laughs as he raises his wand menacingly.\n'
+                  'However, when Voldemort casts his Killing Curse, Harry counters it with a spell of his own, and their twin wand cores connect the two spells.\n'
+                  'With the blood pumping in his ears, Harry can hardly hear the triumphant shout of his friends as he finally overpowers Voldemort, and saves the day!\n')
         else:
-            print('\n// Battle dialogue - lose, to be added later. //\n')
+            print('\nThe trio enters their old Common Room, only to be greeted by the smiling face of their enemy.\n'
+                  '"Ah, Harry... I knew you would come," Voldemort drawls as he pulls out his wand. Hermione grabs Harry\'s arm in fear. \n'
+                  'They weren\'t ready, and they did not come prepared. Voldemort raises his arm, and Ron winces.\n'
+                  '"Harry Potter... prepare to die."\n')
         win_lose(destroyed)
 
     elif current_room == 'Headmaster\'s Office':
         if times == 0:
-            print('\n// Dialogue for Headmaster\'s Office, first time, to be added later. //\n')
+            print('\n"I wish Dumbledore was here," Ron laments, and Harry exhales a small, saddened breath next to him.\n'
+                  '"He\'ll always be with us," Hermione reminds them, and Harry finds himself hoping that is true.\n')
         else:
             if room_horcrux in destroyed:
-                print('\n// Dialogue for Headmaster\'s Office, revisited, horcrux destroyed, to be added later. //\n')
+                print('\n"Putting Slytherin\'s locket in here... what a wank," Ron swears.\n'
+                      '"Ron!" Hermione protests, but Ron isn\'t apologetic in the slightest, and Harry silently agrees with the sentiment.\n')
             else:
-                print('\n// Dialogue for Headmaster\'s Office, revisited, horcrux NOT destroyed, to be added later. //\n')
+                print('\n"We need to destroy the locket this time, Harry. It only adds to Voldemort\'s strength," Hermione reminds her friend.\n')
 
 
 def player_status(current_room, room_horcrux, direction, valid_directions):
