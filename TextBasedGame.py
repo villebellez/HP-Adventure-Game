@@ -96,6 +96,8 @@ list_of_rooms = {
     }
 }
 
+destroyed = []
+
 def welcome_message():
     print(logo, "\n")
     print("> Harry Potter has just returned to Hogwarts to face Lord Voldemort in the final battle.\n"
@@ -112,6 +114,16 @@ def welcome_message():
           'We\'ll follow your lead."\n'
           '"Although we\'d appreciate if you didn\'t get us murdered, mate, so maybe try to pick the right way?" '
           'Ron half-jokes, prompting Hermione to shoot him an unamused look.\n')
+
+
+def update(current_room):
+    room_dict = list_of_rooms.get(current_room)
+    options = list(room_dict.keys())
+    valid_directions = options[:len(options) - 2]
+    room_horcrux = room_dict.get('horcrux')
+    times = room_dict.get('times')
+
+    return room_dict, valid_directions, room_horcrux, times
 
 def dialogue(current_room, times, room_horcrux, previous_room):
     '''Unique NPC dialogue dependent on current room, number of times visited, and if horcrux has been destroyed or not.'''
@@ -387,8 +399,8 @@ def move_rooms(direction, valid_directions, room_dict, times, current_room, prev
             new_room = room_dict.get(direction)
             previous_room = current_room
             current_room = new_room
-            room_dict = list_of_rooms.get(current_room)
-            times = room_dict.get('times')
+
+            room_dict, valid_directions, room_horcrux, times = update(current_room)
 
 
             if current_room == 'Snape\'s Office':
@@ -466,13 +478,7 @@ def main():
     direction = None
 
     while True:
-
-        # Continuously updating variables.
-        room_dict = list_of_rooms.get(current_room)
-        options = list(room_dict.keys())
-        valid_directions = options[:len(options) - 2]
-        room_horcrux = room_dict.get('horcrux')
-        times = room_dict.get('times')
+        room_dict, valid_directions, room_horcrux, times = update(current_room)
 
         dialogue(current_room, times, room_horcrux, previous_room)
 
@@ -484,8 +490,6 @@ def main():
         times += 1
         room_dict.update({'times': times})
 
-
-destroyed = []
 
 if __name__ == "__main__":
     main()
