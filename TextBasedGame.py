@@ -120,7 +120,7 @@ def welcome_message():
 
 
 def update(current_room):
-    '''Updates some of the frequently changing variables.'''
+    '''Updates some of the frequently changing variables when the player changes rooms.'''
 
     room_dict = list_of_rooms.get(current_room)
     options = list(room_dict.keys())
@@ -133,8 +133,7 @@ def update(current_room):
 def dialogue(current_room, times, room_horcrux, previous_room):
     '''Unique NPC dialogue dependent on current room, number of times visited, and if horcrux has been destroyed or not.'''
 
-    if current_room == 'Entrance Hall':
-        if times != 0:
+    if current_room == 'Entrance Hall' and times != 0:
             print('\n"Well, we know nothing is in here," Ron says, looking over at Harry for guidance. "Where to next?"\n')
 
     elif current_room == 'staircase to the dungeons':
