@@ -99,7 +99,10 @@ list_of_rooms = {
 destroyed = []
 
 def welcome_message():
+    '''Prints the game logo, objective, and first set of NPC dialogue'''
+
     print(logo, "\n")
+
     print("> Harry Potter has just returned to Hogwarts to face Lord Voldemort in the final battle.\n"
           "> Luckily, although Voldemort may be evil, it seems as though he is not very bright, "
           "as he hid the six other peices of his soul in horcruxes around the castle.\n"
@@ -117,6 +120,8 @@ def welcome_message():
 
 
 def update(current_room):
+    '''Updates some of the frequently changing variables.'''
+
     room_dict = list_of_rooms.get(current_room)
     options = list(room_dict.keys())
     valid_directions = options[:len(options) - 2]
@@ -325,8 +330,8 @@ def dialogue(current_room, times, room_horcrux, previous_room):
 
 
 def player_status(current_room, direction, valid_directions):
-    '''Displays the player's current room, the horcrux in their current room if they have yet to destroy it,
-    and the list of horcruxes they have already destroyed.'''
+    '''Displays the player's current room, available directions,
+    the list of horcruxes they have already destroyed, and the amount of horcruxes remaining.'''
 
     print("\nPOTTER STATUS:")
 
@@ -387,7 +392,7 @@ def nav(valid_directions, room_horcrux, current_room):
         print(f"After a {random.choice(length)} search, you find that the horcrux in this room is {room_horcrux}. ]")
 
 
-def move_rooms(direction, valid_directions, room_dict, times, current_room, previous_room):
+def move_rooms(direction, valid_directions, room_dict, current_room):
     '''Moves the player to the specified room, or allows them to see their progress.'''
 
     while True:
@@ -401,7 +406,6 @@ def move_rooms(direction, valid_directions, room_dict, times, current_room, prev
             current_room = new_room
 
             room_dict, valid_directions, room_horcrux, times = update(current_room)
-
 
             if current_room == 'Snape\'s Office':
                 if times == 0:
@@ -428,7 +432,7 @@ def move_rooms(direction, valid_directions, room_dict, times, current_room, prev
                 if times == 0:
                     print(f"\n[ You move into the {current_room}. ]")
                 else:
-                    print(f"\n[ You move back into the {current_room}. ]")
+                    print(f"\n[ You return to the {current_room}. ]")
             return current_room, times, previous_room
 
         elif decision == 'status':
@@ -438,19 +442,18 @@ def move_rooms(direction, valid_directions, room_dict, times, current_room, prev
             print("\n[ That is an invalid input. Please try again. ]")
 
 
-def destroy_horcrux(direction, valid_directions, room_dict, room_horcrux, times, current_room, previous_room):
+def destroy_horcrux(direction, current_room, previous_room):
     '''Asks player if they want to destroy a horcrux or continue on with it undestroyed.'''
+
+    room_dict, valid_directions, room_horcrux, times = update(current_room)
 
     yn = input(f"[ Would you like to destroy it? Yes or no. ]\n").lower()
 
     if yn == 'yes':
         print(f"[ You have destroyed {room_horcrux}. ]")
         destroyed.append(room_horcrux)
-        return current_room, times, previous_room
     elif yn == 'no':
-        current_room, times, previous_room = move_rooms(direction, valid_directions, room_dict, times, current_room,
-                                                        previous_room)
-        return current_room, times, previous_room
+        current_room, times, previous_room = move_rooms(direction, valid_directions, room_dict, current_room)
     else:
         print("[ That is an invalid input. Please try again. ]")
 
@@ -481,12 +484,12 @@ def main():
         room_dict, valid_directions, room_horcrux, times = update(current_room)
 
         dialogue(current_room, times, room_horcrux, previous_room)
-
         nav(valid_directions, room_horcrux, current_room)
+
         if room_horcrux != 'none' and room_horcrux not in destroyed:
-            current_room, times, previous_room = destroy_horcrux(direction, valid_directions, room_dict, room_horcrux, times, current_room, previous_room)
+            current_room, times, previous_room = destroy_horcrux(direction, current_room, previous_room)
         else:
-            current_room, times, previous_room = move_rooms(direction, valid_directions, room_dict, times, current_room, previous_room)
+            current_room, times, previous_room = move_rooms(direction, valid_directions, room_dict, current_room)
         times += 1
         room_dict.update({'times': times})
 
