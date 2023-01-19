@@ -11,7 +11,6 @@ logo = ''' _   _                             ____          _    _
 |_| |_| \__,_||_|   |_|    \__, | |_|     \___/  \__| \__| \___||_|   
                            |___/    & THE TEXT-BASED ADVENTURE GAME   '''
 
-# TODO: Get rid of voldemort entry, it's useless. Maybe switch locket and ring, idk.
 
 list_of_rooms = {
     'Entrance Hall': {
@@ -20,7 +19,6 @@ list_of_rooms = {
         'east': 'kitchen',
         'west': 'Ravenclaw Common Room',
         'horcrux': 'none',
-        'voldemort': 'no',
         'times': 0,
     },
     'staircase to the dungeons': {
@@ -28,38 +26,32 @@ list_of_rooms = {
         'east': 'Slytherin Common Room',
         'west': 'Snape\'s Office',
         'horcrux': 'none',
-        'voldemort': 'no',
         'times': 0,
     },
     'Slytherin Common Room': {
         'west': 'staircase to the dungeons',
         'horcrux': 'Marvolo Gaunt\'s Ring',
-        'voldemort': 'no',
         'times': 0,
     },
     'Snape\'s Office': {
         'east': 'staircase to the dungeons',
         'horcrux': 'Nagini',
-        'voldemort': 'no',
         'times': 0,
     },
     'Ravenclaw Common Room': {
         'east': 'Entrance Hall',
         'horcrux': 'none',
-        'voldemort': 'no',
         'times': 0,
     },
     'kitchen': {
         'east': 'Hufflepuff Common Room',
         'west': 'Entrance Hall',
         'horcrux': 'none',
-        'voldemort': 'no',
         'times': 0,
     },
     'Hufflepuff Common Room': {
         'west': 'kitchen',
         'horcrux': 'Helga Hufflepuff\'s Cup',
-        'voldemort': 'no',
         'times': 0,
     },
     'first flight of stairs': {
@@ -67,20 +59,17 @@ list_of_rooms = {
         'east': 'second floor girl\'s bathroom',
         'south': 'Entrance Hall',
         'horcrux': 'none',
-        'voldemort': 'no',
         'times': 0,
     },
     'second floor girl\'s bathroom': {
         'west': 'first flight of stairs',
         'south': 'Chamber of Secrets',
         'horcrux': 'none',
-        'voldemort': 'no',
         'times': 0,
     },
     'Chamber of Secrets': {
         'north': 'second floor girl\'s bathroom',
         'horcrux': 'Tom Riddle\'s Diary',
-        'voldemort': 'no',
         'times': 0,
     },
     'second flight of stairs': {
@@ -88,41 +77,47 @@ list_of_rooms = {
         'east': 'Room of Requirement',
         'west': 'Gryffindor Common Room',
         'horcrux': 'none',
-        'voldemort': 'no',
         'times': 0,
     },
     'Room of Requirement': {
         'west': 'second flight of stairs',
         'horcrux': 'Rowena Ravenclaw\'s Diadem',
-        'voldemort': 'no',
         'times': 0,
     },
     'Gryffindor Common Room': {
         'east': 'second flight of stairs',
         'horcrux': 'none',
-        'voldemort': 'yes',
         'times': 0,
     },
     'Headmaster\'s Office': {
         'south': 'second flight of stairs',
         'horcrux': 'Salazar Slytherin\'s Locket',
-        'voldemort': 'no',
         'times': 0,
     }
 }
 
-# TODO: Finish dialogue, make sure 'else' statements aren't executed if a horcrux room has beeen visited but it hasn't been destroyed.
-def dialogue(current_room, direction, times, room_horcrux, previous_room):
+def welcome_message():
+    print(logo, "\n")
+    print("> Harry Potter has just returned to Hogwarts to face Lord Voldemort in the final battle.\n"
+          "> Luckily, although Voldemort may be evil, it seems as though he is not very bright, "
+          "as he hid the six other peices of his soul in horcruxes around the castle.\n"
+          "> With a little help from his friends Ron and Hermione, Harry must search the castle and destroy all six horcruxes "
+          "before finding and facing his enemy in battle.\n"
+          "> But watch out! If Harry comes face-to-face with Voldemort unprepared, the final battle will not have a happy ending. "
+          "Are you prepared to step into Harry's shoes and save the wizarding world?\n"
+          "\n                    __________________________________________________________________________________________"
+          "_______________________________\n")
+    print('As Harry, Ron, and Hermione step into Hogwarts, they find themselves in the Entrance Hall. '
+          'Hermione looks to her friend, wand held tightly in her hand as she says, "We\'re with you to the end, Harry. '
+          'We\'ll follow your lead."\n'
+          '"Although we\'d appreciate if you didn\'t get us murdered, mate, so maybe try to pick the right way?" '
+          'Ron half-jokes, prompting Hermione to shoot him an unamused look.\n')
+
+def dialogue(current_room, times, room_horcrux, previous_room):
     '''Unique NPC dialogue dependent on current room, number of times visited, and if horcrux has been destroyed or not.'''
 
     if current_room == 'Entrance Hall':
-        if times == 0:
-            print('As Harry, Ron, and Hermione step into Hogwarts, they find themselves in the Entrance Hall. '
-                  'Hermione looks to her friend, wand held tightly in her hand as she says, "We\'re with you to the end, Harry. '
-                  'We\'ll follow your lead."\n'
-                  '"Although we\'d appreciate if you didn\'t get us murdered, mate, so maybe try to pick the right way?" '
-                  'Ron half-jokes, prompting Hermione to shoot him an unamused look.\n')
-        else:
+        if times != 0:
             print('\n"Well, we know nothing is in here," Ron says, looking over at Harry for guidance. "Where to next?"\n')
 
     elif current_room == 'staircase to the dungeons':
@@ -317,7 +312,7 @@ def dialogue(current_room, direction, times, room_horcrux, previous_room):
                 print('\n"We need to destroy the locket this time, Harry. It only adds to Voldemort\'s strength," Hermione reminds her friend.\n')
 
 
-def player_status(current_room, room_horcrux, direction, valid_directions):
+def player_status(current_room, direction, valid_directions):
     '''Displays the player's current room, the horcrux in their current room if they have yet to destroy it,
     and the list of horcruxes they have already destroyed.'''
 
@@ -380,7 +375,7 @@ def nav(valid_directions, room_horcrux, current_room):
         print(f"After a {random.choice(length)} search, you find that the horcrux in this room is {room_horcrux}. ]")
 
 
-def move_rooms(direction, valid_directions, room_dict, room_horcrux, times, current_room, previous_room):
+def move_rooms(direction, valid_directions, room_dict, times, current_room, previous_room):
     '''Moves the player to the specified room, or allows them to see their progress.'''
 
     while True:
@@ -425,7 +420,7 @@ def move_rooms(direction, valid_directions, room_dict, room_horcrux, times, curr
             return current_room, times, previous_room
 
         elif decision == 'status':
-            player_status(current_room, room_horcrux, direction, valid_directions)
+            player_status(current_room, direction, valid_directions)
 
         else:
             print("\n[ That is an invalid input. Please try again. ]")
@@ -441,11 +436,13 @@ def destroy_horcrux(direction, valid_directions, room_dict, room_horcrux, times,
         destroyed.append(room_horcrux)
         return current_room, times, previous_room
     elif yn == 'no':
-        current_room, times, previous_room = move_rooms(direction, valid_directions, room_dict, room_horcrux, times, current_room, previous_room)
+        current_room, times, previous_room = move_rooms(direction, valid_directions, room_dict, times, current_room,
+                                                        previous_room)
         return current_room, times, previous_room
     else:
         print("[ That is an invalid input. Please try again. ]")
-        return current_room, times, previous_room
+
+    return current_room, times, previous_room
 
 
 def win_lose(destroyed):
@@ -462,41 +459,31 @@ def win_lose(destroyed):
 def main():
     '''Main function of the game.'''
 
-    # TODO: Mess around later and see if I can use global keyword for these to decrease clutter, and if I always need to pass a value for a function..
-    # Default starting values.
-    current_room = 'Entrance Hall'
-    previous_room = 'none'
-    direction = 'none'
+    welcome_message()
 
-    print(logo, "\n")
-    print("> Harry Potter has just returned to Hogwarts to face Lord Voldemort in the final battle.\n"
-          "> Luckily, although Voldemort may be evil, it seems as though he is not very bright, "
-          "as he hid the six other peices of his soul in horcruxes around the castle.\n"
-          "> With a little help from his friends Ron and Hermione, Harry must search the castle and destroy all six horcruxes "
-          "before finding and facing his enemy in battle.\n"
-          "> But watch out! If Harry comes face-to-face with Voldemort unprepared, the final battle will not have a happy ending. "
-          "Are you prepared to step into Harry's shoes and save the wizarding world?\n"
-          "\n                    __________________________________________________________________________________________"
-          "_______________________________\n")
+    current_room = 'Entrance Hall'
+    previous_room = None
+    direction = None
 
     while True:
 
         # Continuously updating variables.
         room_dict = list_of_rooms.get(current_room)
         options = list(room_dict.keys())
-        valid_directions = options[:len(options) - 3]
+        valid_directions = options[:len(options) - 2]
         room_horcrux = room_dict.get('horcrux')
         times = room_dict.get('times')
 
-        dialogue(current_room, direction, times, room_horcrux, previous_room)
+        dialogue(current_room, times, room_horcrux, previous_room)
 
         nav(valid_directions, room_horcrux, current_room)
         if room_horcrux != 'none' and room_horcrux not in destroyed:
             current_room, times, previous_room = destroy_horcrux(direction, valid_directions, room_dict, room_horcrux, times, current_room, previous_room)
         else:
-            current_room, times, previous_room = move_rooms(direction, valid_directions, room_dict, room_horcrux, times, current_room, previous_room)
+            current_room, times, previous_room = move_rooms(direction, valid_directions, room_dict, times, current_room, previous_room)
         times += 1
         room_dict.update({'times': times})
+
 
 destroyed = []
 
